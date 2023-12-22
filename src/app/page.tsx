@@ -22,7 +22,7 @@ export default function Home() {
       setIsSubmitting(true);
       setChats((prev) => [...prev, message]);
 
-      const response = await fetch("/api/messages", {
+      const response = await fetch("/api", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

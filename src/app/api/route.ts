@@ -1,11 +1,11 @@
-import { NextApiResponse } from "next";
+import { NextApiRequest, NextApiResponse } from "next";
 import OpenAI from "openai";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-export default async function handler(res: NextApiResponse) {
+export async function POST(req: NextApiRequest, res: NextApiResponse) {
   if (!openai.apiKey) {
     res.status(500).json({
       error: {
@@ -15,10 +15,12 @@ export default async function handler(res: NextApiResponse) {
     return;
   }
 
+  const message = req.body.message;
+
   try {
     const chatCompletion = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
-      messages: [{ role: "user", content: "Hello!" }],
+      messages: [{ role: "user", content: message }],
     });
     res.status(200).json({ result: chatCompletion.choices[0].message });
   } catch (error: any) {
