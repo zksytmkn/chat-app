@@ -38,11 +38,7 @@ export function Chat({ content, role }: Message) {
           name={role === "user" ? "Me" : "Loris"}
           w="40px"
           h="40px"
-          src={
-            role === "assistant"
-              ? "/rorisu_tasogare.png"
-              : "https://emoji-img.s3.ap-northeast-1.amazonaws.com/svg/1f47c.svg"
-          }
+          src={role === "assistant" ? "/kujira.png" : "https://emoji-img.s3.ap-northeast-1.amazonaws.com/svg/1f47c.svg"}
         />
         <Flex
           borderWidth={1}
