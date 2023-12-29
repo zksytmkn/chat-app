@@ -1,13 +1,14 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import { type NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import OpenAI from "openai";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-export async function POST(req: NextApiRequest, res: NextApiResponse) {
+export async function POST(req: NextRequest) {
   if (!openai.apiKey) {
-    res.status(500).json({
+    NextResponse.json({
       error: {
         message: "OpenAI API key not configured, please follow instructions in README.md",
       },
@@ -15,19 +16,19 @@ export async function POST(req: NextApiRequest, res: NextApiResponse) {
     return;
   }
 
-  const message = req.body.message;
+  const { messages } = await req.json();
 
   try {
     const chatCompletion = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
-      messages: message,
+      messages: messages,
     });
-    res.status(200).json({ result: chatCompletion.choices[0].message });
+    NextResponse.json({ result: chatCompletion.choices[0].message });
   } catch (error: any) {
     if (error.response) {
-      res.status(error.response.status).json(error.response.data);
+      NextResponse.json(error.response.data);
     } else {
-      res.status(500).json({
+      NextResponse.json({
         error: {
           message: "An error occurred during your request.",
         },
