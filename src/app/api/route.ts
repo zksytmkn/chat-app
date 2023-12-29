@@ -15,10 +15,12 @@ export async function POST(req: NextApiRequest, res: NextApiResponse) {
     return;
   }
 
+  const message = req.body.message;
+
   try {
     const chatCompletion = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
-      messages: [{ role: "user", content: "Hello!" }],
+      messages: message,
     });
     res.status(200).json({ result: chatCompletion.choices[0].message });
   } catch (error: any) {
